@@ -19,10 +19,11 @@ import java.util.HashMap;
 import com.database.mysql.RepositoriesDB;
 import com.main.parse.CollectorClient;
 import com.project.info.*;
+import com.project.settings.GithubLogin;
 public class GitHubOP {
 
 	int commitNumber;
-	public static String gitUserInfo="migrationlab:abc3551356abcA@";
+	public static String gitUserInfo=GithubLogin.userName+ ":"+ GithubLogin.Password;
 	public static String pathCloneTest=Paths.get(".").toAbsolutePath().normalize().toString() +"/Clone/";
 	Operations operations= new Operations();
 	CollectorClient projectLibrary= new CollectorClient();
