@@ -19,12 +19,12 @@ Open a terminal and run the following commands
 After running this code that database should be created with all tables and views.
 
 * Create new  Java project at eclipse IDE and set the project directory to MigrationMiner folder.
-* Set your MYSQL user name and password in this file "DatabaseLogin.java" that lives here https://github.com/hussien89aa/MigrationMiner/blob/master/MigrationMiner/src/com/project/settings/DatabaseLogin.java.
+* Set your MYSQL user name and password in this file "DatabaseLogin.java" that lives under MigrationMiner/src/com/project/settings/DatabaseLogin.java.
 
-* Set your GitHub user name and password in this file "GithubLogin.java" that lives here https://github.com/hussien89aa/MigrationMiner/blob/master/MigrationMiner/src/com/project/settings/GithubLogin.java, So the tool can search a large number of GitHub projects without authentication issue .
+* Set your GitHub user name and password in this file "GithubLogin.java" that lives under MigrationMiner/src/com/project/settings/GithubLogin.java, So the tool can search a large number of GitHub projects without authentication issue .
 
 * Update data/gitRepositories.csv with a list of git repositories that you want to scan and search for migration
-* Run Main.java file that lives https://github.com/hussien89aa/MigrationMiner/blob/master/MigrationMiner/src/com/main/parse/Main.java.
+* Run Main.java file that lives under MigrationMiner/src/com/main/parse/Main.java.
 
 * Wait for while Then you will see database Tables filled with required fragments and migration info. Here is the tables schema
  
