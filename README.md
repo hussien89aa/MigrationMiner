@@ -23,7 +23,7 @@ After running this code that database should be created with all tables and view
 
 * Set your GitHub user name and password in this file "GithubLogin.java" that lives under MigrationMiner/src/com/project/settings/GithubLogin.java, So the tool can search a large number of GitHub projects without authentication issue .
 
-* Update data/gitRepositories.csv with a list of git repositories that you want to scan and search for migration
+* Update MigrationMiner/data/gitRepositories.csv with a list of git repositories that you want to scan and search for migration
 * Run Main.java file that lives under MigrationMiner/src/com/main/parse/Main.java.
 
 * Wait for while Then you will see database Tables filled with required fragments and migration info. Here is the tables schema
