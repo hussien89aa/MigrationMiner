@@ -30,6 +30,7 @@ import com.subversions.process.GitHubOP;
 public class DetectorClient {
 	String LOG_FILE_NAME="app_commits.txt";
 	static String pathClone=Paths.get(".").toAbsolutePath().normalize().toString() +"/Clone/Process/";
+	String pathToSaveJAVALibrary= "/librariesClasses/jar";
 	TerminalCommand terminalCommand= new TerminalCommand();
 	CleanJavaCode cleanJavaCode= new CleanJavaCode();
 	public static void main(String[] args) {
@@ -296,7 +297,7 @@ public class DetectorClient {
         return segmentList;
 	}
 	
-	String pathToSaveJAVALibrary= "/librariesClasses/jar";
+
 	// This function return list of cleaned segments
 ArrayList<Segment> startCloning(String appURL,String previousCommitName,String migrateAtCommitName){
 	
@@ -316,11 +317,14 @@ ArrayList<Segment> startCloning(String appURL,String previousCommitName,String m
 	}
 	  return segmentList;
 }
+
+ 
 	// This method responsible for clone two commits  that has migration to find file changes between them
-	 ArrayList<String> cloneMigratedCommits(String appURL,
+ArrayList<String> cloneMigratedCommits(String appURL,
 			 String previousCommitName,String migrateAtCommitName){
 		 ArrayList<String> listOfChangedFiles=new  ArrayList<String>();
-		 //Download load the library
+		
+		 //Download The library Jar singatures
 			DownloadLibrary downloadLibrary = new DownloadLibrary(pathToSaveJAVALibrary);
 			
 	        downloadLibrary.download(MigratedLibraries.fromLibrary,false);
@@ -335,6 +339,9 @@ ArrayList<Segment> startCloning(String appURL,String previousCommitName,String m
 				System.err.println("Cannot download either "+ MigratedLibraries.fromLibrary+ " or "+ MigratedLibraries.toLibrary );
 				return listOfChangedFiles;
 			}
+	        
+	    
+	        
 	        
 		 //Clone App if isnot cloned already
 		 GitHubOP gitHubOP= new GitHubOP(appURL,pathClone);

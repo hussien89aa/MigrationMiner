@@ -42,7 +42,7 @@ public class DownloadLibrary {
 	}
 	
 	//Delete files that donseot have signatures
-	public void deleteError(String LibraryName){
+	public void isValidLibraryToGenerateSigantures(String LibraryName){
 		boolean isFound=false;
 		String tfFilePath=pathlib+"/tfs/"+ LibraryName.replace(".jar", ".jar.txt");
 		String jarFilePath=pathlib+"/"+ LibraryName;
@@ -149,7 +149,7 @@ public class DownloadLibrary {
 			Process p = Runtime.getRuntime().exec(new String[]{"bash","-c",cmdStr});
 			 p.waitFor();
 			System.out.println("<== Process completed: ");
-			deleteError(libraryName);
+			isValidLibraryToGenerateSigantures(libraryName);
 		}catch (Exception e) {
 			// TODO: handle exception
 		}

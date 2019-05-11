@@ -64,7 +64,7 @@ public class GitHubOP {
 			return "";
 		}
 	  //System.out.println ();
-	  return(split[0]+ "//"+ gitUserInfo+ split[1]);
+	  return(split[0]+ "//"+ gitUserInfo+"@"+ split[1]);
 	}
 	// clone the link in machine
 	public	void cloneApp( ){

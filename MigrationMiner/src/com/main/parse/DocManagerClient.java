@@ -21,7 +21,11 @@ import com.segments.build.TerminalCommand;
 public class DocManagerClient {
 	public static String folderOfDocs= "/Docs";
 	public static String pathDocs=Paths.get(".").toAbsolutePath().normalize().toString() + folderOfDocs;
+
+	//Created needed folder
+	TerminalCommand terminalCommand= new TerminalCommand();
 	public DocManagerClient() {
+		 terminalCommand.createFolder("Docs");
 		// TODO Auto-generated constructor stub
 	}
 	DownloadLibrary downloadLibrary = new DownloadLibrary(folderOfDocs);
@@ -31,11 +35,8 @@ public class DocManagerClient {
 	}
 	void run(){
 
-		//Created needed folder
-		TerminalCommand terminalCommand= new TerminalCommand();
-	    terminalCommand.createFolder("Docs");
-		 
-		int option=2;
+	   
+	 
 		
 		LinkedList<MigrationRule> migrationRules= new MigrationRuleDB().getMigrationRulesWithoutVersion(1);
 		ProjectLibrariesDB projectLibrariesDB = new ProjectLibrariesDB();
@@ -55,7 +56,7 @@ public class DocManagerClient {
 			listOfProjectLibraries.addAll( new ProjectLibrariesDB().getMigrationProjectLibraries( 
 					(migrationRule.FromLibrary.equals("json")|| migrationRule.FromLibrary.equals("slf4j")  ?migrationRule.FromLibrary +":":migrationRule.FromLibrary) )) ; 
 			for (String libraryInfo : listOfProjectLibraries) {
-               docManagerClient.processOptions( option,   migrationRule.FromLibrary,   libraryInfo);   
+               docManagerClient.collectDocs(   migrationRule.FromLibrary,   libraryInfo);   
 		    }
 			
 			//Download and save 'FromLibrary' docuemantion in DB
@@ -63,58 +64,23 @@ public class DocManagerClient {
 			listOfProjectLibraries.addAll( projectLibrariesDB.getMigrationProjectLibraries( 
 					(migrationRule.ToLibrary.equals("json") || migrationRule.ToLibrary.equals("slf4j")  ?migrationRule.ToLibrary +":":migrationRule.ToLibrary))) ;		 
 			for (String libraryInfo : listOfProjectLibraries) {
-			  docManagerClient.processOptions( option,   migrationRule.ToLibrary,   libraryInfo);
+			  docManagerClient.collectDocs(   migrationRule.ToLibrary,   libraryInfo);
 		    }
 			//System.out.flush();
 			
 		}
 		
-		 if(option==1 ) {
-        	 System.out.println(" You need to run  script at Docs/command.sh, then come back and run option 3");
-         } 
-		
-		/*
-		Scanner reader = new Scanner(System.in); 
-		System.out.println("Enter library(JavaDoc.jar) to parse. Assume it lives in /Docs");
-		String jarDocName=reader.nextLine();
-		System.out.println("Enter library name");
-		String libraryName=reader.nextLine();
-		System.out.println("Enter Parse method Type (1,2)");
-		int methodType=reader.nextInt();
-		new DocManagerClient().start(  jarDocName,  libraryName,  methodType);
-		
-		*/
-		
-		
-		
-
-		//new DocManager().downloadByDIR();
+		 
+	 
 		
 	}
 	
-	void processOptions(int option, String libraryName, String libraryInfo){
-	      System.out.println(libraryInfo);
-		 if(option==1 || option==2){
+	void collectDocs(String libraryName, String libraryInfo){
+	         System.out.println("Collect Docs for : "+ libraryInfo);
         	 downloadLibrary.download(libraryInfo,true); 
-         } 
-         if(option==2){
-        	     start(  libraryName,  libraryInfo,  1);
-                 start( libraryName,  libraryInfo,  2); 
-         }
-         if(option==3){
-        	 String[] LibraryInfos =libraryInfo.split(":");
-     		if(LibraryInfos.length<3){ 
-     			System.err.println(" Error in library name ("+ libraryInfo+")");		
-     			return;
-     	    }
-     		//String DgroupId=LibraryInfos[0];
-     		String DartifactId=LibraryInfos[1];
-     		String Dversion=LibraryInfos[2];
-     		String libraryFileName= DartifactId +"-"+ Dversion +"-javadoc.jar";
-    		String jarDocFolder= libraryFileName.replace("-javadoc.jar", "Docs");
-    		parseHTML.start(pathDocs +"/"+jarDocFolder,libraryName,1);
-    		parseHTML.start(pathDocs +"/"+jarDocFolder,libraryName,2); 
-         }
+    	     start(  libraryName,  libraryInfo,  1);
+             start( libraryName,  libraryInfo,  2); 
+         
 	}
 	
 	void start( String libraryName, String LibraryInfo, int methodType){
