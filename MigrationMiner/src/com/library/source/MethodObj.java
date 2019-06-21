@@ -91,8 +91,13 @@ import java.util.ArrayList;
 	    // check if their is static instance
 	    methodObj.packageName= getPackageName(methodObj.methodName);
 	    methodObj.methodName= removeDot(methodObj.methodName);
- 
+        
 	    methodObj.fullMethodName=lineCode;
+	    
+	    if(methodObj.returnType.equals("public")||methodObj.returnType.equals("protected")|| methodObj.returnType.equals("private") ){
+	    	methodObj.scope= methodObj.returnType;	
+	    	methodObj.returnType="void";
+	    }
 		return methodObj;
 	}
 	

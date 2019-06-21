@@ -6,6 +6,7 @@ public class TerminalCommand {
 			try{
 				System.out.println("==> create folder : "+folderPath);
 			    String cmdStr="mkdir -p " + folderPath   ;
+			    System.out.println(cmdStr);
 				Process p = Runtime.getRuntime().exec(new String[]{"bash","-c",cmdStr});
 				p.waitFor();
 				System.out.println("<== folder is created");

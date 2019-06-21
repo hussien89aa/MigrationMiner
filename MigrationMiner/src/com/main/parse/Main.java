@@ -5,11 +5,11 @@ public class Main {
 	public static void main(String[] args) {
  
 		 //1 Collection
-		 new CollectorClient().startOnlineSearch();
-		 //2- Find migration rule
-		 new MigrationRulesClient().start();
+     	 new CollectorClient().startOnlineSearch();
+    	 //2- Find migration rule
+ 		   new MigrationRulesClient().start();  
 		 //3- Find code segments
-		 new DetectorClient().start();
+		  new DetectorClient().start();
 		 //4-  Collect Docs
 		 new DocManagerClient().run();
 		 

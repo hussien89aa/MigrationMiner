@@ -113,7 +113,7 @@ public class MigrationRulesClient {
 		 ArrayList<CPObject> listOfFilterLibraries= 	filterCartesianProduct.filter(listOfProjectLibrariesCP);
 			
 			Double threeShold=1.0;
-			int frequency= 3; // number of times we see that relation //TODO: update to 3 as min
+			int frequency= 1; // number of times we see that relation //TODO: update to 3 as min
 			int numberOfTureMigrationRules=0;
 			int numberOfTureUpgradeRules=0;
 			int numberOfFalseRules=0;
