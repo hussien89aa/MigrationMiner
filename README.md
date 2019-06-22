@@ -1,6 +1,7 @@
 ## MigrationMiner
-
-A tool to detect migration code between two Java third-party library. As a summary, Modern software systems rely heavily on third-party library functions as a mean to save time, reduce implementation costs, and increase their software quality when offering rich, robust and up-to-date features. However, as software systems evolve frequently, the need for better services and more secure, reliable and quality functionalities causes developers to often replace their old libraries with more recent ones. This process of replacing a library with a different one, while preserving the same functionality, is known as library migration. Learn more about evolution migration that happened over a year of development. We track library migration in around 321k open source projects 
+ MigrationMiner is a library/API written in Java that can detect code migration between two Java third-party library.  In practice, library migration can be seen as the process of replacing a library with a different one, while preserving the same program behavior. 
+ 
+ Currently, it supports the detection of  any migration happen in project history that uses maven project architecture(has pom.xml) and Android project.
 
 ## Prerequisite
 
