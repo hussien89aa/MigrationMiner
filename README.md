@@ -10,7 +10,13 @@ MigrationMiner is an automated tool that written in Java to detects code migrati
 * Install  MYSQL  from,  https://www.mysql.com/
 
 
-## How to run the Project
+## How to run the Project:
+### To run the project on your local machine you could try one of these two options:
+
+### A- Using Video
+* You could run the project by following this video https://youtu.be/sAlR1HNetXc
+
+### B- following steps
 * First you need to build the dataset, by running the following script Database/MigrationMinerDBSQL.sql.
 Open a terminal and run the following commands
 <pre>
