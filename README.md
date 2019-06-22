@@ -50,5 +50,6 @@ After running this code that database should be created with all tables and view
 ## This Tool is used by the following papers
 * Alrubaye, H., & Mkaouer, M. W. (2018, October). Automating the detection of third-party Java library migration at the function level. In Proceedings of the 28th Annual International Conference on Computer Science and Software Engineering (pp. 60-71). IBM Corp.
 * Alrubaye, H., Mkaouer, & M. W., Ali, O (2019). On the Use of Information Retrieval to Automate the Detection of Third-Party Java Library Migration At The Function Level, 27th IEEE/ACM International Conference on Program Comprehension 2019.
+* Alrubaye, Hussein, Mohamed Wiem Mkaouer, Igor Khokhlov, Leon Reznik, Ali Ouni, and Jason Mcgoff. "Learning to Recommend Third-Party Library Migration Opportunities at the API Level." arXiv preprint arXiv:1906.02882 (2019).
 
  
