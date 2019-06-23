@@ -1,7 +1,7 @@
 ## MigrationMiner
-MigrationMiner is an automated tool that written in Java to detects code migrations performed between two Java third-party library. Given a list of open source projects, the tool detects potential library migration code changes and collects the specific code fragments where developer replaces methods from the retired library with methods from the new library. Moreover, our tool collects the library documentation that is associated with every method involved in the migration
+MigrationMiner is an automated tool written in Java to detects code migrations performed between two Java third-party library. Given a list of open source projects, the tool detects potential library migration code changes and collects the specific code fragments where developer replaces methods from the retired library with methods from the new library. Moreover, our tool collects the library documentation that is associated with every method involved in the migration
  
- Currently, it supports the detection of  any migration happen in project history that uses maven project architecture(has pom.xml) and Android project.
+ Currently, it supports the detection of any migration happens in project history that uses maven project architecture(has pom.xml) and Android project.
 
 ## Prerequisite
 
@@ -10,7 +10,7 @@ MigrationMiner is an automated tool that written in Java to detects code migrati
 * Install  MYSQL  from,  https://www.mysql.com/
 
 
-## How to run the Project:
+## How to install and run the tool:
 ### To run the project on your local machine you could try one of these two options:
 
 ### A- Using Video
@@ -33,7 +33,9 @@ After running this code that database should be created with all tables and view
 * Update MigrationMiner/data/gitRepositories.csv with a list of git repositories that you want to scan and search for migration
 * Run Main.java file that lives under MigrationMiner/src/com/main/parse/Main.java.
 
-* Wait for while Then you will see database Tables filled with required fragments and migration info. Here is the schema of the table
+
+## Tool output:
+* After you Run Main.java, Wait for while Then you will see database Tables filled with required fragments and migration info. Here is the schema of the table
  
    * Repositories: Has a list of projects that scanned by the tool
    * AppCommits: Has list of projects' commits information( Commit Id, developer name, Commit text, and commit date)
