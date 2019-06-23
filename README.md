@@ -7,7 +7,7 @@ MigrationMiner is an automated tool written in Java to detects code migrations p
 
 * Install java JKD from [here](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
 * Install Eclipse IDE for Java Developers from [here](https://www.eclipse.org/downloads/packages/).
-* Install  MYSQL from [here](  https://www.mysql.com/).
+* Install  MYSQL Server from [here](https://dev.mysql.com/downloads/installer/).
 
 
 ## How to install and run the tool:
