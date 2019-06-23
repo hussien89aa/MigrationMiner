@@ -5,18 +5,18 @@ MigrationMiner is an automated tool written in Java to detects code migrations p
 
 ## Prerequisite
 
-* Install Eclipse IDE for Java from, https://www.eclipse.org/downloads/packages/
-
-* Install  MYSQL  from,  https://www.mysql.com/
+* Install java JKD from [here](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
+* Install Eclipse IDE for Java Developers from [here](https://www.eclipse.org/downloads/packages/).
+* Install  MYSQL from [here](  https://www.mysql.com/).
 
 
 ## How to install and run the tool:
-### To run the project on your local machine you could try one of these two options:
+#### To run the project on your local machine you could try one of these two options:
 
-### A- Using Video
+#### A- Using Video
 * You could run the project by following this video https://youtu.be/sAlR1HNetXc
 
-### B- following steps
+#### B- following steps
 * First you need to build the dataset, by running the following script Database/MigrationMinerDBSQL.sql.
 Open a terminal and run the following commands
 <pre>
