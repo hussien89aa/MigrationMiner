@@ -4,10 +4,10 @@
  </p>
 
 
-### To use this tool cite this paper please.
+### When you use this tool, please cite this paper.
 
 <pre>
-@inproceedings{xiong2018reproducible,
+@inproceedings{alrbaye2019MigrationMiner,
   title={MigrationMiner: An Automated Detection Tool of Third-Party Java Library Migration at the Method Level},
   author={Hussein Alrubaye, Mohamed Wiem Mkaouer, Ali Ouni},
   booktitle={2019 IEEE International Conference on Software Maintenance and Evolution (ICSME)},
@@ -67,7 +67,7 @@ After running the commands, the database should be created with all tables and v
 ![main](https://repository-images.githubusercontent.com/185124992/bcd2f000-6f9d-11e9-9040-fbc3190eb01a)
 
 
-## Migration Miner has been used so far in the following papers:
+## MigrationMiner has been used so far in the following papers:
 
 * Alrubaye, H., & Mkaouer, M. W. (2018, October). [Automating the detection of third-party Java library migration at the function level](https://dl.acm.org/citation.cfm?id=3291299). In Proceedings of the 28th Annual International Conference on Computer Science and Software Engineering (pp. 60-71). IBM Corp.
 * Alrubaye, H., Mkaouer, & M. W., Ali, O (2019).[ On the Use of Information Retrieval to Automate the Detection of Third-Party Java Library Migration At The Function Level](https://dl.acm.org/citation.cfm?id=3339129), 27th IEEE/ACM International Conference on Program Comprehension 2019.
