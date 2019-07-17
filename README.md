@@ -76,3 +76,6 @@ After running the commands, the database should be created with all tables and v
 * Alrubaye, H., Mkaouer, & M. W., Ali, O (2019). [MigrationMiner: An Automated Detection Tool of Third-Party Java Library Migration at the Method Level](https://arxiv.org/pdf/1907.02997.pdf). 2019 IEEE International Conference on Software Maintenance and Evolution (ICSME).
 * Alrubaye, Hussein, Deema AlShoaibi, Mohamed Wiem Mkaouer, Ali Ouni, . [How Does API Migration Impact Software Quality and Comprehension? An Empirical Study](https://people.rit.edu/hat6622/papers/API_Migration_Empirical.pdf). arXiv preprint arXiv:1906.02882 (2019). 
  
+## License
+
+This software is licensed under the [MIT license](https://opensource.org/licenses/MIT).
