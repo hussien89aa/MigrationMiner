@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="lib/mysql-connector.jar"/>
 	<classpathentry kind="lib" path="lib/sqlite-jdbc-3.20.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/Users/hussienalrubaye/eclipse-workspace/MigrationMiner/MigrationMiner/lib/javaparser-core-3.13.10.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

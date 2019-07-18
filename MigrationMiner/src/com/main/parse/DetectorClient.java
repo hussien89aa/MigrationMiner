@@ -169,7 +169,7 @@ public class DetectorClient {
     				 				System.out.println("==> Start saving all founded segmenst in database");
     				 				 for(Segment segment:listOfblocks){
     				 					 // save the commit and project that has the migration
-    				 					 migratedCommitDB.add(migrationRule.ID,currentProjectsID, oldcommitID,segment);
+    				 					 migratedCommitDB.add(migrationRule.ID,currentProjectsID, oldcommitID,segment,fromLibraryFind,toLibraryFind);
         				    	    	 
     				 				 }
     				 				 System.out.println("<== complete saving all founded segmenst in database");
@@ -287,7 +287,7 @@ public class DetectorClient {
 	 				 for(Segment segment:listOfblocks){
 	 					 
 	 					 // save the commit and project that has the migration
-		    	    	 migratedCommitDB.add(MigratedLibraries.ID,appCommit.AppID, appCommit.CommitID,segment);
+		    	    	 migratedCommitDB.add(MigratedLibraries.ID,appCommit.AppID, appCommit.CommitID,segment,fromLibraryVaild, toLibraryVaild);
 		    	    	 
 	 				 }
 	 				 System.out.println("<== complete saving all founded segmenst in database");

@@ -18,8 +18,8 @@ import com.subversions.process.Commit;
 public class LibraryDocumentationDB {
  
   
-	public void add(String LibraryName,String PackageName, String ClassName,MethodDocs methodDocs){
-   
+	public void add(String LibraryName,MethodDocs methodDocs){
+		   
 	      
 	      try {
 			   Connection c = null;
@@ -28,16 +28,18 @@ public class LibraryDocumentationDB {
 		        
 		         c.setAutoCommit(false);
 	      
-	         String sql = "INSERT INTO LibraryDocumentation (LibraryName,PackageName,ClassName,MethodFullName,MethodDescription, MethodParams,MethodReturn) VALUES ( ? , ? , ? , ? , ? , ? , ? );"; 
+	         String sql = "INSERT INTO LibraryDocumentation (LibraryName,PackageName,ClassName,MethodFullName,MethodDescription, MethodParams,MethodReturn,SourceCode,ClassType) VALUES ( ? , ? , ? , ? , ? , ? , ?,?,? );"; 
 	         
 	         PreparedStatement stmt = c.prepareStatement(sql);
 	        	      stmt.setString(1,LibraryName.replaceAll("\\h", " "));
-	        	      stmt.setString(2,PackageName.replaceAll("\\h", " "));
-	        	      stmt.setString(3,ClassName.replaceAll("\\h", " "));
+	        	      stmt.setString(2,methodDocs.PackageName.replaceAll("\\h", " "));
+	        	      stmt.setString(3,methodDocs.ClassName.replaceAll("\\h", " "));
 	        	      stmt.setString(4,methodDocs.fullName.replaceAll("\\h", " ") );
 	        	      stmt.setString(5, methodDocs.description.replaceAll("\\h", " "));
 	        	      stmt.setString(6,methodDocs.inputParams.replaceAll("\\h", " "));
 	        	      stmt.setString(7,methodDocs.returnParams.replaceAll("\\h", " "));
+	        	      stmt.setString(8,methodDocs.SourceCode.replaceAll("\\h", " "));
+	        	      stmt.setString(9,methodDocs.ClassType);
 	        	      stmt.executeUpdate();
 	      
 	         stmt.close();
@@ -51,7 +53,7 @@ public class LibraryDocumentationDB {
 	
 	 
 	//TODO: change to get list of docs
-	public ArrayList<MethodDocs> getDocs(String LibraryName  ){
+	public ArrayList<MethodDocs> getDocs(String LibraryName, String methodName  ){
 		 ArrayList<MethodDocs> listOfMethodDocs= new  ArrayList<MethodDocs> ();
 		 
 		  Statement stmt = null;
@@ -63,20 +65,22 @@ public class LibraryDocumentationDB {
 		      c.setAutoCommit(false);
 		      stmt = c.createStatement();
 		      //TODO: Set only one commit for testing
-		      String sql = "SELECT * from LibraryDocumentation where LibraryName like '%"+ LibraryName +"%' and MethodFullName like '%(%)%' and MethodDescription !='' ";
-		      ResultSet rs = stmt.executeQuery( sql); //where ProjectsID=192"
-		     //System.out.println(sql);
+		      String sql = "SELECT * from LibraryDocumentation where LibraryName like '%"+ LibraryName +"%' and MethodFullName like '% "+ methodName+"(%' and MethodDescription!=''";
+		       ResultSet rs = stmt.executeQuery( sql); //where ProjectsID=192"
+		       //System.out.println(sql);
 		      while ( rs.next() ) {
-		    	 String fullName= rs.getString("MethodFullName").replaceAll("\\h", " ");// incase decode space with 32 ASCII code and 160 change then to 32 only
-		    	  fullName = fullName.replaceAll("[?(]+", "("); // clean data
-		              listOfMethodDocs.add(new MethodDocs(
-		            		  fullName ,
-		               		  rs.getString("MethodDescription").replaceAll("\\h", " ") , 
-		               		  rs.getString("MethodParams").replaceAll("\\h", " ")  ,
-		               		  rs.getString("MethodReturn").replaceAll("\\h", " ") ,
-		               		  rs.getString("ClassName").replaceAll("\\h", " ")  ,
-		               		  rs.getString("PackageName").replaceAll("\\h", " ") 
-		               		  ));
+		    	  String fullName= rs.getString("MethodFullName").replaceAll("\\h", " ");// incase decode space with 32 ASCII code and 160 change then to 32 only
+			    	 // fullName = fullName.replaceAll("[?(]+", "("); // clean data
+			              listOfMethodDocs.add(new MethodDocs(
+			            		  fullName ,
+			               		  rs.getString("MethodDescription").replaceAll("\\h", " ") , 
+			               		  rs.getString("MethodParams").replaceAll("\\h", " ")  ,
+			               		  rs.getString("MethodReturn").replaceAll("\\h", " ") ,
+			               		  rs.getString("ClassName").replaceAll("\\h", " ")  ,
+			               		  rs.getString("PackageName").replaceAll("\\h", " ") ,
+			               		 rs.getString("SourceCode").replaceAll("\\h", " ") ,
+			               		 rs.getString("ClassType").replaceAll("\\h", " ") 
+			               		  ));
 		      }
 		      rs.close();
 		      stmt.close();
@@ -90,10 +94,10 @@ public class LibraryDocumentationDB {
 
 		}
 	 public static void main(String[] args) {
-		 ArrayList<MethodDocs> listOfMethodDocs= new LibraryDocumentationDB().getDocs("junit");
-		for (MethodDocs methodDocs : listOfMethodDocs) {
-			methodDocs.printWithClass();
-		}
+		 ArrayList<MethodDocs> listOfMethodDocs= new LibraryDocumentationDB().getDocs("junit","assertTrue");
+			for (MethodDocs methodDocs : listOfMethodDocs) {
+				methodDocs.printWithClass();
+			}
  	}
 	
 }

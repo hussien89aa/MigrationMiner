@@ -2,7 +2,7 @@ package com.project.settings;
 
 public class GithubLogin {
 	
-	public static String  userName="Add user name here"; 
-	public static String  Password="add password here"; 
+	public static String  userName="migrationlab"; 
+	public static String  Password="abc3551356abcA"; 
 
 }

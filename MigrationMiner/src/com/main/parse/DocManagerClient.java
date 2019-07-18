@@ -6,10 +6,16 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+import com.database.mysql.LibraryDocumentationDB;
 import com.database.mysql.MigrationRule;
 import com.database.mysql.MigrationRuleDB;
+import com.database.mysql.MigrationSegments;
+import com.database.mysql.MigrationSegmentsDB;
 import com.database.mysql.ProjectLibrariesDB;
+import com.library.Docs.MethodDocs;
 import com.library.Docs.ParseHTML;
+import com.library.lib.LibManagerClient;
+import com.library.lib.MethodLib;
 import com.library.source.DownloadLibrary;
 import com.project.info.Project;
 import com.segments.build.TerminalCommand;
@@ -36,54 +42,100 @@ public class DocManagerClient {
 	void run(){
 
 	   
-	 
-		
-		LinkedList<MigrationRule> migrationRules= new MigrationRuleDB().getMigrationRulesWithoutVersion(1);
-		ProjectLibrariesDB projectLibrariesDB = new ProjectLibrariesDB();
-		DocManagerClient docManagerClient = new DocManagerClient();
-		ParseHTML parseHTML = new ParseHTML();
-		
-		System.out.println("From Library\t To library\n************************************");
-		for (MigrationRule migrationRule : migrationRules) {
-			// if(!migrationRule.FromLibrary.contains("testng") && !migrationRule.ToLibrary.contains("testng") ){
-			//	 continue;
-			// }
-			System.out.println(migrationRule.FromLibrary+ "\t<==>\t"+migrationRule.ToLibrary);
-	
-			
-			//Download and save 'FromLibrary' docuemantion in DB
-			ArrayList<String> listOfProjectLibraries= new ArrayList<>();
-			listOfProjectLibraries.addAll( new ProjectLibrariesDB().getMigrationProjectLibraries( 
-					(migrationRule.FromLibrary.equals("json")|| migrationRule.FromLibrary.equals("slf4j")  ?migrationRule.FromLibrary +":":migrationRule.FromLibrary) )) ; 
-			for (String libraryInfo : listOfProjectLibraries) {
-               docManagerClient.collectDocs(   migrationRule.FromLibrary,   libraryInfo);   
-		    }
-			
-			//Download and save 'FromLibrary' docuemantion in DB
-			listOfProjectLibraries.clear();
-			listOfProjectLibraries.addAll( projectLibrariesDB.getMigrationProjectLibraries( 
-					(migrationRule.ToLibrary.equals("json") || migrationRule.ToLibrary.equals("slf4j")  ?migrationRule.ToLibrary +":":migrationRule.ToLibrary))) ;		 
-			for (String libraryInfo : listOfProjectLibraries) {
-			  docManagerClient.collectDocs(   migrationRule.ToLibrary,   libraryInfo);
-		    }
-			//System.out.flush();
-			
-		}
-		
+		LinkedList<MigrationSegments> migrationSegmentsLibraries= new MigrationSegmentsDB().getAllMigrationSegmentsLibraries();
 		 
+		System.out.println("From Library\t To library\n************************************");
+		for (MigrationSegments migrationSegmentsLibraryies : migrationSegmentsLibraries) {
+			System.out.println("#"+ migrationSegmentsLibraryies.fromLibVersion+"===" +  migrationSegmentsLibraryies.toLibVersion);
+            processOptions(    migrationSegmentsLibraryies.fromLibVersion);   
+		    processOptions(   migrationSegmentsLibraryies.toLibVersion);
+	    }
+		 
+       
 	 
 		
 	}
 	
-	void collectDocs(String libraryName, String libraryInfo){
-	         System.out.println("Collect Docs for : "+ libraryInfo);
-        	 downloadLibrary.download(libraryInfo,true); 
-    	     start(  libraryName,  libraryInfo,  1);
-             start( libraryName,  libraryInfo,  2); 
-         
+	ArrayList<String> patsedListOfLibs = new ArrayList<>();
+	void processOptions(   String libraryInfo){
+		
+		  if(patsedListOfLibs.contains(libraryInfo)){
+		     System.out.println("This library already parsed in database, not need to parse again: "+ libraryInfo);	
+               return;
+		  }
+		  patsedListOfLibs.add(libraryInfo);
+		
+	     // System.out.println(libraryInfo);
+ 
+	      
+	      String[] LibraryInfos =libraryInfo.split(":");
+		  if(LibraryInfos.length<3){ 
+				System.err.println(" Error in library name ("+ libraryInfo+")");		
+				return;
+		  }
+		  String DgroupId=LibraryInfos[0];
+		  String DartifactId=LibraryInfos[1];
+		  String Dversion=LibraryInfos[2];
+		 
+		  String libraryFileNameDocs= DartifactId +"-"+ Dversion +"-javadoc.jar";
+		  String jarDocFolder= libraryFileNameDocs.replace("-javadoc.jar", "Docs");
+		   
+ 
+		 
+		   //	Download Java Docs and extaract HTML
+		   downloadLibrary.download(libraryInfo,true); 
+		   jar2HTML(  libraryInfo );
+			
+			//TODO: We distable collect library source code not needed for now
+			//Convert jar to source code
+			//libManagerClient.jarToSourceCode(libraryInfo);
+ 
+			 
+			//ArrayList<MethodLib> listOfMethodLibs =  libManagerClient.parseJarSource(libraryInfo);
+			 
+			
+			//Collect library documenation and method body
+			ArrayList<MethodDocs> listOfMethodDocs  = parseHTML.start(pathDocs +"/"+jarDocFolder ,1);
+			//If first phase didnot work use second one
+			if(listOfMethodDocs.size()==0){
+				listOfMethodDocs  =  parseHTML.start(pathDocs +"/"+jarDocFolder, 2);
+			}
+			
+			
+			//Add in database
+			LibraryDocumentationDB libraryDocumentationDB =new LibraryDocumentationDB();
+			System.out.println("===> Mapp method code to method Docs and save them in DB");
+		     System.out.println("listOfMethodDocs: "+ listOfMethodDocs.size());
+			for (MethodDocs methodDocs : listOfMethodDocs) {
+				
+				//Wrong method ignore
+			    if(methodDocs.methodObj==null){
+			    	//System.err.println("2- Ignored method not good signature:"+ methodDocs.fullName);
+			    	continue;
+			    }
+			    
+			    MethodDocs methodDocsFound = new MethodDocs(methodDocs.fullName, "", "", "");
+			    methodDocsFound.description= methodDocs.description;
+		        methodDocsFound.inputParams= methodDocs.inputParams;
+		        methodDocsFound.returnParams= methodDocs.returnParams;
+		        methodDocsFound.ClassName=methodDocs.ClassName;
+		        methodDocsFound.PackageName=methodDocs.PackageName;
+		        methodDocsFound.SourceCode= "";
+		        methodDocsFound.ClassType= "";
+		        libraryDocumentationDB.add(libraryInfo, methodDocsFound);
+			}
+     	
+
+			listOfMethodDocs.clear();
+			
+			
+      
+          
 	}
 	
-	void start( String libraryName, String LibraryInfo, int methodType){
+	
+	//LibManagerClient libManagerClient = new LibManagerClient();
+	void jar2HTML( String LibraryInfo){
         
 		String[] LibraryInfos =LibraryInfo.split(":");
 		if(LibraryInfos.length<3){ 
@@ -97,6 +149,15 @@ public class DocManagerClient {
 
 		String jarDocFolder= libraryFileName.replace("-javadoc.jar", "Docs");
 		String jarDocNameZip= libraryFileName +".zip";
+		
+		 
+		File f = new File(pathDocs+"/"+jarDocFolder);
+		if (f.exists()) {
+		   System.out.println("Good! Library Docs source already there :"+ pathDocs+"/"+jarDocFolder); 
+		   return;
+		}
+	 
+		
 		try{
 			System.out.println("==> Start generate HTML from docs ");
 		    String cmdStr="cd " + pathDocs + " && mkdir "+ jarDocFolder + 
@@ -108,30 +169,9 @@ public class DocManagerClient {
 			p.waitFor();
 			System.out.println("<== Complete Generate");
 			
-			//Collect library documenation
-			parseHTML.start(pathDocs +"/"+jarDocFolder,libraryName,methodType);
-			
 		}catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-	}
-
-	
-	//Download all Docs for all JavaDoc in folder
-	void downloadByDIR(){
-		File folder = new File(pathDocs );
-		File[] listOfFiles = folder.listFiles();
-
-		for (int i = 0; i < listOfFiles.length; i++) {
-		  if (listOfFiles[i].isFile()) {
-			  String fileName = listOfFiles[i].getName();
-		      System.out.println("Process Jar Docs==> " + fileName.substring(0,fileName.length()-4));
-		      System.out.println("Parse using method 1");
-		      start(  fileName,  fileName.substring(0,fileName.length()-4),  1);
-		      System.out.println("Parse using method 2");
-		      start(  fileName,  fileName.substring(0,fileName.length()-4),  2);
-		   }
-	    }
 	}
 
 }

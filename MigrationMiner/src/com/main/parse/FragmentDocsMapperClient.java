@@ -51,9 +51,8 @@ public class FragmentDocsMapperClient {
 			 ArrayList<Segment> segmentList = new MigrationSegmentsDB().getSegmentsObj(migrationRule.ID);
 			 
 			   
-			   //Load Library Docs for migration Rule
-			ArrayList<MethodDocs> fromLibrary = new LibraryDocumentationDB().getDocs( migrationRule.FromLibrary);
-			ArrayList<MethodDocs>  toLibrary = new LibraryDocumentationDB().getDocs(   migrationRule.ToLibrary);
+			 
+	
 			 
 			  //<div class="row">
 			  //  <div class="col-sm-6" style="background-color:#ef2846;">.col-sm-4</div>
@@ -73,7 +72,12 @@ public class FragmentDocsMapperClient {
 				  String docsAddMethods="";
 		
 				  for(String methodSignature: segment.removedCode){
+					  
+						
 					  MethodObj methodFormObj= MethodObj.GenerateSignature(methodSignature);
+					//Load Library Docs for migration Rule, We load all versions docs in case the  migration version dosenot have we get it from other
+					  ArrayList<MethodDocs> fromLibrary = new LibraryDocumentationDB().getDocs( migrationRule.FromLibrary,methodFormObj.methodName);
+						
 					  MethodDocs methodFromDocs = MethodDocs.GetObjDocs(fromLibrary, methodFormObj);
 					
 					  //Docs to HTML
@@ -86,15 +90,15 @@ public class FragmentDocsMapperClient {
 					      if(methodFromDocs.inputParams.length()>0){
 					    	  docsRemoveMethods+="<br/><strong>Parameters:</strong>\n<ul style=\"color:#ef2846;\">\n";
 					    	  for (String param :  methodFromDocs.inputParams.split("\\|\\|")) {
-					    		  docsRemoveMethods+="\t<li>" + param +"</li>\n";
+					    		  docsRemoveMethods+="\t<li style=\"color:#ef2846;\">" + param +"</li>\n";
 							  }
 					    	  docsRemoveMethods+="</ul>\n";
 					    	  //docsRemoveMethods+= methodFromDocs.inputParams+"<br/>\n";
 					      }
                           if(methodFromDocs.returnParams.length()>0){
-                        	  docsRemoveMethods+="<br/><strong>Return Parameters:</strong>\n<ul >\n";
+                        	  docsRemoveMethods+="<br/><strong>Return Parameters:</strong>\n<ul style=\"color:#ef2846;\" >\n";
 					    	  for (String param :  methodFromDocs.returnParams.split("\\|\\|")) {
-					    		  docsRemoveMethods+="\t<li>" + param +"</li>\n";
+					    		  docsRemoveMethods+="\t<li style=\"color:#ef2846;\">" + param +"</li>\n";
 							  }
 					    	  docsRemoveMethods+="</ul>\n";
                         	 // docsRemoveMethods+=  methodFromDocs.returnParams +"<br/>\n";
@@ -110,7 +114,10 @@ public class FragmentDocsMapperClient {
 
 				   //System.out.println("-------");
 				   for(String methodSignature: segment.addedCode){
+					   
 					      MethodObj methodFormObj= MethodObj.GenerateSignature(methodSignature);
+					  	  ArrayList<MethodDocs>  toLibrary = new LibraryDocumentationDB().getDocs(   migrationRule.ToLibrary,methodFormObj.methodName);
+					  	
 					      MethodDocs methodFromDocs = MethodDocs.GetObjDocs(toLibrary, methodFormObj);
 					    
 					      //Docs to HTML
@@ -122,16 +129,16 @@ public class FragmentDocsMapperClient {
 						      if(methodFromDocs.inputParams.length()>0){
 						    	  docsAddMethods+="<br/><strong>Parameters:</strong>\n<ul style=\"color:#009933;\" >\n";
 						    	  for (String param :  methodFromDocs.inputParams.split("\\|\\|")) {
-						    		  docsAddMethods+="\t<li>" + param +"</li>\n";
+						    		  docsAddMethods+="\t<li style=\"color:#009933;\" >" + param +"</li>\n";
 								  }
 						    	  docsAddMethods+="</ul>\n";
 						          //docsAddMethods+= methodFromDocs.inputParams+"<br/>\n";
 						      }
                               if(methodFromDocs.returnParams.length()>0){
                             	  //docsAddMethods+=  methodFromDocs.returnParams +"<br/>\n";
-                            	  docsAddMethods+="<br/><strong>Return Parameters:</strong>\n<ul >\n";
+                            	  docsAddMethods+="<br/><strong>Return Parameters:</strong>\n<ul style=\"color:#009933;\" >\n";
 						    	  for (String param :  methodFromDocs.returnParams.split("\\|\\|")) {
-						    		  docsAddMethods+="\t<li>" + param +"</li>\n";
+						    		  docsAddMethods+="\t<li style=\"color:#009933;\" >" + param +"</li>\n";
 								  }
 						    	  docsAddMethods+="</ul>\n";
 						      }

@@ -158,7 +158,7 @@ public void addFileName(String filePath){
 	public int getCountRemovedLines(){ return this.removedCode.size();}
 	public int getTotalLinesNumbers(){return this.addedCode.size()*this.removedCode.size(); }
 	public void print(){
-	 
+		 System.out.println("\n===================== Code Fragment ===========================");
 	   	 System.out.println("Remove:"+  this.getCountRemovedLines());
 		 System.out.println("Add:"+ this.getCountAddLines());
 		 for(String lineIn: this.blockCode){

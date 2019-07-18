@@ -7,6 +7,7 @@ import com.library.source.MethodObj;
 
 public class MethodDocs {
 
+
 	public String fullName;
 	public String description;
 	public String returnParams;
@@ -14,6 +15,8 @@ public class MethodDocs {
 	public String ClassName;
 	public String PackageName;
 	public MethodObj methodObj;
+	public String SourceCode;
+	public String ClassType;
 	public MethodDocs(String fullName,String description,String inputParams,String returnParams ) {
 		this.fullName=fullName; 
 		this.description=description;
@@ -21,21 +24,20 @@ public class MethodDocs {
 		this.returnParams=returnParams;
 		this.methodObj= MethodObj.GenerateSignature(fullName.trim());
 	}
-	public MethodDocs(String fullName,String description,String inputParams,String returnParams,String ClassName ,String PackageName) {
+	public MethodDocs(String fullName,String description,String inputParams,String returnParams,String ClassName ,String PackageName,String SourceCode,String ClassType) {
 		this.fullName=fullName; 
 		this.description=description;
 		this.inputParams=inputParams;
 		this.returnParams=returnParams;
 		this.ClassName=ClassName;
 		this.PackageName= PackageName;
+		this.SourceCode=SourceCode;
 		this.methodObj= MethodObj.GenerateSignature(fullName.trim() );
+		this.ClassType=ClassType;
 	}
 	
-	
 	   public void print(){
-		//int countMethods=1;
-		//for (MethodDocs methodDocs : listOfMethodDocs) {
-			 System.out.println("\n==============================");
+			 System.out.println("\n===================== Method Docs ===========================");
 			 System.out.println("Method: "+ this.fullName);
 			 System.out.println("Description: "+ this.description);
 			 if(this.inputParams.length() >0){
@@ -44,9 +46,9 @@ public class MethodDocs {
 			 if(this.returnParams.length() >0){
 				   System.out.println("Return : "+ this.returnParams );  
 			 }
-			 System.out.println("------------------------- methodObj -------------------------");
+			 System.out.println("------------------------- method Obj -------------------------");
 			 this.methodObj.print();
-		//}	
+ 
 	}
 	   public void printWithoutObject(){
 		//int countMethods=1;
@@ -152,9 +154,10 @@ public class MethodDocs {
 	  }
 	  
 		public static void main(String[] args) {
-			ArrayList<MethodDocs> fromLibrary = new LibraryDocumentationDB().getDocs("easymock");
 			
-			MethodObj methodObj= MethodObj.GenerateSignature("IMockBuilder<T> addMockedMethod(Method method)");
+	      ArrayList<MethodDocs> fromLibrary = new LibraryDocumentationDB().getDocs("gstreamer-java","start");
+			
+			MethodObj methodObj= MethodObj.GenerateSignature("public abstract void start(org.gstreamer.media.event.StartEvent);");
 			methodObj.print();
 			System.out.println("======== Output ========");
 			MethodDocs methodDocs =GetObjDocs(fromLibrary, methodObj);

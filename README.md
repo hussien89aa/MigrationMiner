@@ -52,6 +52,7 @@ After running the commands, the database should be created with all tables and v
 
 ## Tool output
 
+##### A- Ouput as Relational Database
 * After running Main.java, the database Tables will be filled with any migration infomation found. For each potential migration, the following information can be found in database, whose schema is as follows:
  
    * Repositories: Has the list of projects that scanned by the tool.
@@ -60,12 +61,72 @@ After running the commands, the database should be created with all tables and v
    * MigrationRules:  List of migration Rules that were detected from the Dataset.
    * MigrationSegments: List Of migration Fragments that were extract from software migration.
    * LibraryDocumenation: Library documentation associated with every library version that has been involved in any migration.
-   
-   Also, there will be a generated HTML file named "MigrationMinnerOutput.html" that has the summary of all migrations detected, and for each migration, all its corresponding code fragments along with their Library documentation. An illutrative example of this file is in the following picture:
+
+##### B- Ouput as HTML
+   There will be a generated HTML file named "MigrationMinnerOutput.html" that has the summary of all migrations detected, and for each migration, all its corresponding code fragments along with their Library documentation. An illutrative example of this file is in the following picture:
    
 ![main](https://repository-images.githubusercontent.com/185124992/bcd2f000-6f9d-11e9-9040-fbc3190eb01a)
 
 
+##### C- Ouput as Objects
+If you may to read the output as objects you could use the following code. or run [TestClient.java](https://github.com/hussien89aa/MigrationMiner/blob/master/MigrationMiner/src/com/main/parse/Main.java)
+
+<pre>
+ 
+//Return list of migrations between two pairs of libraries( added/removed)
+LinkedList<MigrationRule> migrationRules= new MigrationRuleDB().getMigrationRulesWithoutVersion(1);
+
+for (MigrationRule migrationRule : migrationRules) {
+ System.out.println("== Migration Rule "+ migrationRule.FromLibrary + " <==> "+  migrationRule.ToLibrary +"==");
+
+ /*
+ *  For every migrations, retrieve list of collected of fragments for migration at method level.
+ *  every fragment has N added methods M removed methods
+ */
+ ArrayList<Segment> segmentList = new MigrationSegmentsDB().getSegmentsObj(migrationRule.ID);
+
+ for (Segment segment : segmentList) {
+
+  segment.print();
+
+  // Print all removed method signatures With Docs
+  printMethodWithDocs( migrationRule.FromLibrary,segment.removedCode);  
+
+  // Print all added method signatures With Docs
+  printMethodWithDocs( migrationRule.ToLibrary,segment.addedCode);
+
+ } // End fragment for every migration
+
+}  // End library migration
+
+
+/* 
+* This method takes list of methods signatures with library that methods belong to.
+* It will print the signatures and Docs for every method
+*/
+void printMethodWithDocs(String libraryName,ArrayList<String> listOfMethods ) {
+
+ // For every add method print the Docs
+ for(String methodSignature: listOfMethods){
+
+  // Convert  method signatures as String to Object
+  MethodObj methodFormObj= MethodObj.GenerateSignature(methodSignature);
+
+  //retrieve Docs from the library for method has that name
+  ArrayList<MethodDocs>  toLibrary = new LibraryDocumentationDB().getDocs( libraryName,methodFormObj.methodName);
+
+  //Map method signatures to docs
+  MethodDocs methodFromDocs = MethodDocs.GetObjDocs(toLibrary, methodFormObj);
+
+  if(methodFromDocs.methodObj== null) {
+   System.err.println("Cannot find Docs for: "+ methodSignature);
+   continue;
+  }
+  methodFromDocs.print();      
+ }
+}
+  </pre>
+ 
 ## MigrationMiner has been used so far in the following papers:
 
 * Alrubaye, H., & Mkaouer, M. W. (2018, October). [Automating the detection of third-party Java library migration at the function level](https://dl.acm.org/citation.cfm?id=3291299). In Proceedings of the 28th Annual International Conference on Computer Science and Software Engineering (pp. 60-71). IBM Corp.

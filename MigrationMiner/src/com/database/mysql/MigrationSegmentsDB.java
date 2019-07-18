@@ -122,7 +122,7 @@ public ArrayList<Segment> getSegmentsObj(int migrationRuleID){
 	 
 	 return segmentList;
 }
-	public void add( int MigrationRuleID,int AppID, String CommitID,Segment segment ){
+	public void add( int MigrationRuleID,int AppID, String CommitID,Segment segment,String fromLibVersion, String toLibVersion ){
  
 	      //Statement stmt = null;
 	      try {
@@ -132,15 +132,17 @@ public ArrayList<Segment> getSegmentsObj(int migrationRuleID){
 		        
 		         c.setAutoCommit(false);
 	        // stmt = c.createStatement();
-	         String sql = "INSERT INTO MigrationSegments (MigrationRuleID,AppID,CommitID,FromCode,ToCode,fileName) VALUES (?,?,?,?,?,?);"; 
-	         PreparedStatement stmt = c.prepareStatement(sql);
-	        	      stmt.setInt(1,MigrationRuleID);
-	        	      stmt.setInt(2,AppID);
-	        	      stmt.setString(3,CommitID);
-	        	      stmt.setString(4, arrayListToString(segment.removedCode));
-	        	      stmt.setString(5, arrayListToString(segment.addedCode) );
-	        	      stmt.setString(6,segment.fileName);
-	        	      stmt.executeUpdate();
+		         String sql = "INSERT INTO MigrationSegments (MigrationRuleID,AppID,CommitID,FromCode,ToCode,fileName,fromLibVersion,toLibVersion) VALUES (?,?,?,?,?,?,?,?);"; 
+		         PreparedStatement stmt = c.prepareStatement(sql);
+		        	      stmt.setInt(1,MigrationRuleID);
+		        	      stmt.setInt(2,AppID);
+		        	      stmt.setString(3,CommitID);
+		        	      stmt.setString(4,  arrayListToString(segment.removedCode));
+		        	      stmt.setString(5 ,arrayListToString(segment.addedCode) );
+		        	      stmt.setString(6,segment.fileName);
+		        	      stmt.setString(7,fromLibVersion);
+		        	      stmt.setString(8,toLibVersion);
+		        	      stmt.executeUpdate();
 	         
 	         //stmt.executeUpdate(sql);
 	         stmt.close();
@@ -160,6 +162,42 @@ public ArrayList<Segment> getSegmentsObj(int migrationRuleID){
 	}
 	
 	
+	
+  // Return only unique pair of added removed libraries
+	public LinkedList<MigrationSegments> getAllMigrationSegmentsLibraries(){
+		LinkedList<MigrationSegments> listOfSegmnets= new LinkedList<MigrationSegments>();
+	  Statement stmt = null;
+	   try {
+		   Connection c = null;
+		   Class.forName("com.mysql.jdbc.Driver");  
+		   c=DriverManager.getConnection( DatabaseLogin.url,DatabaseLogin.username,DatabaseLogin.password); 
+	        
+	      c.setAutoCommit(false);
+	      stmt = c.createStatement();
+	      ResultSet rs = stmt.executeQuery( "select fromLibVersion,toLibVersion from MigrationSegments group by fromLibVersion,toLibVersion" );
+	      
+	      while ( rs.next() ) {
+	    	  listOfSegmnets.add(new MigrationSegments(
+	    			  0,
+	    			  null,
+	    			  null,
+	    			  null ,
+	    			  null,
+	     			  rs.getString("fromLibVersion"),
+	     			  rs.getString("toLibVersion")));
+	      }
+	      rs.close();
+	      stmt.close();
+	      c.close();
+	   } catch ( Exception e ) {
+	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	      
+	   }
+	  
+	  return listOfSegmnets;
+	}
+		
+	
 	//This function return list of migration rules for database
 	public LinkedList<MigrationSegments> getMigrationSegments(int migrationRuleID){
 		LinkedList<MigrationSegments> listOfSegmnets= new LinkedList<MigrationSegments>();
@@ -174,8 +212,14 @@ public ArrayList<Segment> getSegmentsObj(int migrationRuleID){
 	      ResultSet rs = stmt.executeQuery( "select * from MigrationSegments WHERE  MigrationRuleID="+ migrationRuleID );
 	      
 	      while ( rs.next() ) {
-	    	  listOfSegmnets.add(new MigrationSegments(rs.getInt("AppID"),rs.getString("CommitID"),rs.getString("FromCode"),
-	     			   rs.getString("ToCode") ));
+	    	  listOfSegmnets.add(new MigrationSegments(
+	    			  rs.getInt("AppID"),
+	    			  rs.getString("CommitID"),
+	    			  rs.getString("FromCode"),
+	     			  rs.getString("ToCode") ,
+	     			  rs.getString("fileName"),
+	     			  rs.getString("fromLibVersion"),
+	     			  rs.getString("toLibVersion")));
 	      }
 	      rs.close();
 	      stmt.close();
@@ -186,5 +230,42 @@ public ArrayList<Segment> getSegmentsObj(int migrationRuleID){
 	   }
 	  
 	  return listOfSegmnets;
+	}
+	
+	
+	  // Return only unique pair of added removed libraries
+	public MigrationSegments getLibrariesForGivenMethods(String MigrationRuleID,String searchFor){
+		MigrationSegments  migrationSegments =new MigrationSegments();
+	  Statement stmt = null;
+	   try {
+		   Connection c = null;
+		   Class.forName("com.mysql.jdbc.Driver");  
+		   c=DriverManager.getConnection( DatabaseLogin.url,DatabaseLogin.username,DatabaseLogin.password); 
+	        
+	      c.setAutoCommit(false);
+	      stmt = c.createStatement();
+	      //System.out.println("select fromLibVersion,toLibVersion from MigrationSegments where MigrationRuleID="+ MigrationRuleID+" and " +searchFor +" group by fromLibVersion,toLibVersion limit 1");
+	      ResultSet rs = stmt.executeQuery( "select fromLibVersion,toLibVersion from MigrationSegments where MigrationRuleID="+ MigrationRuleID+" and " +searchFor +" group by fromLibVersion,toLibVersion limit 1" );
+	      
+	      while ( rs.next() ) {
+	    	  migrationSegments= new MigrationSegments(
+	    			  0,
+	    			  null,
+	    			  null,
+	    			  null ,
+	    			  null,
+	     			  rs.getString("fromLibVersion"),
+	     			  rs.getString("toLibVersion"));
+	    	  break;
+	      }
+	      rs.close();
+	      stmt.close();
+	      c.close();
+	   } catch ( Exception e ) {
+	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	      
+	   }
+	  
+	  return migrationSegments;
 	}
 }

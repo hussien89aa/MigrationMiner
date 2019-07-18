@@ -23,24 +23,25 @@ public class ParseHTML {
 	public static String pathDocs=Paths.get(".").toAbsolutePath().normalize().toString() +"/Docs/";
 	
 	// get list of all files from a path
-	public void listf(String directoryName, List<File> files) {
-	    File directory = new File(directoryName);
+		public void listf(String directoryName, List<File> files,String fileExtention) {
+		    File directory = new File(directoryName);
 
-	    // Get all the files from a directory.
-	    File[] fList = directory.listFiles();
-	    if(fList != null){
-	        for (File file : fList) {
-	            if (file.isFile() && file.getName().endsWith("html")) {
-	                files.add(file);
-	            } else if (file.isDirectory()) {
-	                listf(file.getAbsolutePath(), files);
-	            }
-	        }
-	    }
-	}
+		    // Get all the files from a directory.
+		    File[] fList = directory.listFiles();
+		    if(fList != null){
+		        for (File file : fList) {
+		            if (file.isFile() && file.getName().endsWith(fileExtention)) {
+		                files.add(file);
+		            } else if (file.isDirectory()) {
+		                listf(file.getAbsolutePath(), files,fileExtention);
+		            }
+		        }
+		    }
+		}
 
-	//Parse method names and description form html file method 1
-	public ArrayList<MethodDocs> parse1(String content) {
+	 
+//Parse method names and description form html file method 1
+	public ArrayList<MethodDocs> parse1(String content,String packageName,String className) {
 		ArrayList<MethodDocs> listOfMethodDocs= new ArrayList<MethodDocs>();
 		
 		String html="";
@@ -63,7 +64,13 @@ public class ParseHTML {
 					  }
 				  }
 				  fullName = fullName.replaceAll("[\r\n  ]+", " "); // remove muti line from name and double space to one space we added two sapce after \n
-				   String description= element.select("div.block").text();
+				 
+				  //Only consider methods in search, ignore enums or others
+				   if(!(fullName.trim().length()>0 && fullName.contains(")") && fullName.contains("(") )){
+					   continue;
+				   }
+				   
+				  String description= element.select("div.block").text();
 				   
 				   for (Element preTag : element.select("div.block") ){
 						  if(codeExample=="" && preTag.tagName()=="pre"){
@@ -114,7 +121,10 @@ public class ParseHTML {
 					   }
 				   }
 				  
-				 listOfMethodDocs.add(new MethodDocs(fullName, description,  paramsAll,returnParamsAll));
+				  
+				  listOfMethodDocs.add(new MethodDocs(fullName, description,  paramsAll,returnParamsAll,className,packageName, "",""));
+				  
+				
 				
 				  
 				  
@@ -131,7 +141,7 @@ public class ParseHTML {
 	
 	
 	//Parse method names and description form html file method 2
-	public ArrayList<MethodDocs> parse2(String content) {
+	public ArrayList<MethodDocs> parse2(String content, String packageName, String className) {
 		ArrayList<MethodDocs> listOfMethodDocs= new ArrayList<MethodDocs>();
 		
 		String html="";
@@ -153,6 +163,11 @@ public class ParseHTML {
 					fullName = fullNameElement.text(); 
 				    fullName = fullName.replaceAll("[\r\n  ]+", " "); // remove muti line from name and double space to one space we added two sapce after \n
 				   
+				    //Only consider methods in search, ignore enums or others
+					 if(!(fullName.trim().length()>0 && fullName.contains(")") && fullName.contains("(") )){
+						   continue;
+					 }
+					   
 				    Element dlElements = fullNameElement.nextElementSibling();
 				    if(dlElements.nodeName().equals("dl")){
 				     
@@ -220,7 +235,7 @@ public class ParseHTML {
 				  }
 	
 	 
-				 listOfMethodDocs.add(new MethodDocs(fullName, description,  paramsAll,returnParamsAll));
+				 listOfMethodDocs.add(new MethodDocs(fullName, description,  paramsAll,returnParamsAll,className,packageName, "",""));
 				
 				  
 				  
@@ -241,17 +256,17 @@ public class ParseHTML {
 			  return new String(encoded, encoding);
 	 }
 	
-    public void start(String directoryName,String LibraryName, int methodType){
+  public  ArrayList<MethodDocs> start(String directoryName, int methodType){
     	System.out.println("\n============>  Start collect library documentation from("+ directoryName +") <================");
     	int numberOfParseClasses=0;
     	int numberOfClassesNoDocs=0;
-    	int  totalMethodsParsed=0;
+    	//int  totalMethodsParsed=0;
+    	
+    	ArrayList<MethodDocs> listOfMethodDocs  = new ArrayList<>() ;
     	// get all files in folder
     	List<File> files = new ArrayList() ;
-		new ParseHTML().listf(directoryName, files);
+		new ParseHTML().listf(directoryName, files,"html");
 		for (File file : files) {
-			//System.out.println(file.getName());
-			//System.out.println(file.getPath());
 			try {
 				String packageName=  file.getPath().substring(directoryName.length()+1,file.getPath().length());
 				if(packageName.equals(file.getName())){
@@ -263,6 +278,9 @@ public class ParseHTML {
 				// convert / to .
 				packageName = packageName.replaceAll("/", "."); // clean data
 				
+				 String className= file.getName();
+				 className=   className.substring(0,className.length()-5); //remove .html
+				
 				//System.out.println("packageName:"+ packageName);
 				//System.out.println("\n************************************************************************************************************************");
 				 //System.out.println("*************** Parse Class("+ file.getName() +")("+ file.getPath() +")***********");
@@ -270,13 +288,13 @@ public class ParseHTML {
 				//System.out.println("************************************************************************************************************************\n");
 				
 				String content = readFile(file.getPath(), StandardCharsets.UTF_8);
-				ArrayList<MethodDocs> listOfMethodDocs  = new ArrayList<>() ;
+				 ArrayList<MethodDocs> listOfMethodDocsLocal  = new ArrayList<>() ;
 				 switch (methodType) {
 					case 1:
-						 listOfMethodDocs = parse1(content);
+						listOfMethodDocsLocal= parse1(content,packageName,className) ;
 						break;
 					case 2:
-						 listOfMethodDocs = parse2(content);
+						listOfMethodDocsLocal=  parse2(content,packageName,className);
 						break;
 					default:
 						System.err.println("Error can not method type");
@@ -284,50 +302,39 @@ public class ParseHTML {
 				  }
 			
 				//Do we have documenation ?
-				if(listOfMethodDocs.size() >0){
-					
-					numberOfParseClasses++;
-					 
-					//Add in database
-					LibraryDocumentationDB libraryDocumentationDB =new LibraryDocumentationDB();
-					for (MethodDocs methodDocs : listOfMethodDocs) {
-						// methodDocs.print();
-						//Save inn database
-						String ClassName= file.getName();
-						ClassName= ClassName.substring(0,ClassName.length()-5); //remove .html
-						//Save only methods that has description
-						//if(methodDocs.description.length()>0){
-							libraryDocumentationDB.add(LibraryName,packageName, ClassName, methodDocs);
-						//}
-						
-					}
+				if(listOfMethodDocsLocal.size() >0){	
+					listOfMethodDocs.addAll(listOfMethodDocsLocal);
+					numberOfParseClasses++; 		
 				}else{
 					numberOfClassesNoDocs++;
 					//System.out.println("Class dosenot have documentation");
 				}
 				
-			    totalMethodsParsed+= listOfMethodDocs.size();
+			    //totalMethodsParsed+= listOfMethodDocs.size();
 				
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
 		}
 		
+	
+		
 		System.out.println("\n============>  Summary Report <================");
 		System.out.println("Number of parsed Classes is ("+ (numberOfParseClasses +numberOfClassesNoDocs) +")");
 		System.out.println("Number of parsed Classes have methods description is ("+ numberOfParseClasses +")");
 		System.out.println("Number of parsed Classes Donot have methods description is ("+ numberOfClassesNoDocs +")");
-		System.out.println("Number of parsed methods is ("+ totalMethodsParsed +")\n");
+		System.out.println("Number of parsed methods is ("+ listOfMethodDocs.size() +")\n");
 		 
+		return listOfMethodDocs;
 		
     }
-	
-    void test(){
+    
+ void test(){
     	
     	try{
 	    	String file="/Users/hussienalrubaye/Documents/workspace/FunMapping/Docs/junit-4.12-javadoc.jarDocs/org/junit/Assert.html";
 	    	String content = readFile(file, StandardCharsets.UTF_8);
-			ArrayList<MethodDocs> listOfMethodDocs  =    parse2(content);
+			ArrayList<MethodDocs> listOfMethodDocs  =    parse2(content,"Pakcage","class");
 			 for (MethodDocs methodDocs : listOfMethodDocs) {
 				methodDocs.print();
 			} 
@@ -337,9 +344,19 @@ public class ParseHTML {
 		}
     }
 	public static void main(String[] args) {
-			 new ParseHTML().start(pathDocs + "mockito-core-2.23.0-javadoc.jarDocs","mockito",1);
-			//new ParseHTML().test();
+		     String libraryName="xxx:mockito-core:2.23.0";
+		      
+		     ArrayList<MethodDocs> listOfMethodDocs= new ParseHTML().start(pathDocs + "mockito-core-2.23.0-javadoc.jarDocs",1);
+			 for (MethodDocs methodDocs : listOfMethodDocs) {
+				 if(methodDocs.methodObj==null){
+				    	 System.err.println("1- Ignored method not good signature:"+ methodDocs.fullName);
+				    	continue;
+				    }
+				methodDocs.print();
+			  }
+		     //new ParseHTML().test();
 		
 	}
+
 
 }
