@@ -35,10 +35,10 @@
 #### B- Using the following steps
 * First you need to build the dataset, by running the following script Database/MigrationMinerDBSQL.sql.
 Open a terminal and run the following commands
-<pre>
+```sql
  mysql -u root -p
  source ./MigrationMinerDBSQL.sql
-</pre>
+```
 After running the commands, the database should be created with all tables and views.
 
 * Create a new Java project at eclipse IDE and set the project directory to MigrationMiner folder.
@@ -71,7 +71,7 @@ After running the commands, the database should be created with all tables and v
 ##### C- Ouput as Objects
 You could read the output as objects by writing the following code. or run [TestClient.java](https://github.com/hussien89aa/MigrationMiner/blob/master/MigrationMiner/src/com/main/parse/TestClient.java). That could help you to integrate the tool with your code.
 
-<pre>
+```java
  
 //Return list of migrations between two pairs of libraries( added/removed)
 LinkedList<MigrationRule> migrationRules= new MigrationRuleDB().getMigrationRulesWithoutVersion(1);
@@ -127,7 +127,7 @@ void printMethodWithDocs(String libraryName,ArrayList<String> listOfMethods ) {
   methodFromDocs.print();      
  }
 }
-  </pre>
+```
  
 ## MigrationMiner has been used so far in the following papers:
 
