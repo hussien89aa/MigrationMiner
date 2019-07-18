@@ -69,7 +69,7 @@ After running the commands, the database should be created with all tables and v
 
 
 ##### C- Ouput as Objects
-If you may to read the output as objects you could use the following code. or run [TestClient.java](https://github.com/hussien89aa/MigrationMiner/blob/master/MigrationMiner/src/com/main/parse/Main.java)
+You could read the output as objects by writing the following code. or run [TestClient.java](https://github.com/hussien89aa/MigrationMiner/blob/master/MigrationMiner/src/com/main/parse/TestClient.java). That could help you to integrate the tool with your code.
 
 <pre>
  
@@ -77,7 +77,8 @@ If you may to read the output as objects you could use the following code. or ru
 LinkedList<MigrationRule> migrationRules= new MigrationRuleDB().getMigrationRulesWithoutVersion(1);
 
 for (MigrationRule migrationRule : migrationRules) {
- System.out.println("== Migration Rule "+ migrationRule.FromLibrary + " <==> "+  migrationRule.ToLibrary +"==");
+ System.out.println("== Migration Rule "+ migrationRule.FromLibrary +
+      " <==> "+  migrationRule.ToLibrary +"==");
 
  /*
  *  For every migrations, retrieve list of collected of fragments for migration at method level.
@@ -113,7 +114,8 @@ void printMethodWithDocs(String libraryName,ArrayList<String> listOfMethods ) {
   MethodObj methodFormObj= MethodObj.GenerateSignature(methodSignature);
 
   //retrieve Docs from the library for method has that name
-  ArrayList<MethodDocs>  toLibrary = new LibraryDocumentationDB().getDocs( libraryName,methodFormObj.methodName);
+  ArrayList<MethodDocs>  toLibrary = new LibraryDocumentationDB()
+                                           .getDocs( libraryName,methodFormObj.methodName);
 
   //Map method signatures to docs
   MethodDocs methodFromDocs = MethodDocs.GetObjDocs(toLibrary, methodFormObj);
