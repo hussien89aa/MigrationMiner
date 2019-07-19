@@ -17,6 +17,14 @@
 </pre>
 
  
+## This tool is not limited to library migration. You could use tool for:
+- Migration/upgrade for Android Apps at the method and library Level.
+- Migration/upgrade for Java Maven Projects at method and library Level.
+- Track third-party libraries upgrade/migration for a project.
+- Download third-party libraries used at given commit and extract source code + class/methods signature from jar file.
+- Download third-party libraries documentation used at given commit and convert jar file to a relational database.
+
+
 
 ## Prerequisites
 
