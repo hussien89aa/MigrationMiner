@@ -66,13 +66,11 @@ describe AppCommits;
 CREATE TABLE  LibraryDocumentation  (
 	 LibraryName 	varchar(100),
 	 PackageName varchar(100),
-	 ClassType 	varchar(100),
 	 ClassName 	varchar(100),
 	 MethodFullName	text,
 	 MethodDescription 	text,
 	 MethodParams 	text,
-	 MethodReturn 	text,
-	 SourceCode     text
+	 MethodReturn 	text
 
 );
 describe LibraryDocumentation; 
