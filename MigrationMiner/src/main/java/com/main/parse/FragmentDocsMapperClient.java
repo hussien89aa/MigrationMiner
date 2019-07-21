@@ -85,7 +85,7 @@ public class FragmentDocsMapperClient {
 				      if( methodFromDocs.fullName.length()>0){
 				    	  docsRemoveMethods+= "<p style=\"color:#ef2846;\">\n";
 				    	  docsRemoveMethods+=  "- "+ methodFromDocs.fullName+"<br/>\n";
-				    	  docsRemoveMethods+= "<br/><strong>Description:</strong><br/>\n"+ methodFromDocs.description +"<br/>\n";
+				    	  docsRemoveMethods+= "<br/><strong>Description:</strong><br/>\n"+ methodFromDocs.description.replaceAll("<", "&lt;").replaceAll(">", "&gt;") +"<br/>\n";
 					     // docsRemoveMethods+= methodFromDocs.inputParams+"<br/>\n"+ methodFromDocs.returnParams +"<br/>\n";
 					      if(methodFromDocs.inputParams.length()>0){
 					    	  docsRemoveMethods+="<br/><strong>Parameters:</strong>\n<ul style=\"color:#ef2846;\">\n";
@@ -125,7 +125,7 @@ public class FragmentDocsMapperClient {
 					      if(methodFromDocs.fullName.length()>0){  
 					    	  docsAddMethods+= "<p style=\"color:#009933;\">\n";
 						      docsAddMethods+= "+ "+ methodFromDocs.fullName+"<br/>\n";
-						      docsAddMethods+= "<br/><strong>Description:</strong><br/>\n"+ methodFromDocs.description +"<br/>\n";
+						      docsAddMethods+= "<br/><strong>Description:</strong><br/>\n"+ methodFromDocs.description.replaceAll("<", "&lt;").replaceAll(">", "&gt;") +"<br/>\n";
 						      if(methodFromDocs.inputParams.length()>0){
 						    	  docsAddMethods+="<br/><strong>Parameters:</strong>\n<ul style=\"color:#009933;\" >\n";
 						    	  for (String param :  methodFromDocs.inputParams.split("\\|\\|")) {
