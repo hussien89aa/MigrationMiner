@@ -20,8 +20,8 @@ import org.jdom2.input.SAXBuilder;
 import com.database.mysql.ProjectLibrariesDB;
 import com.database.mysql.RepositoriesDB;
 import com.project.info.Operation;
-import com.project.info.ProjectFiles;
 import com.project.settings.AppSettings;
+import com.project.settings.ProjectBuildFile;
 import com.project.settings.ProjectType;
 import com.segments.build.TerminalCommand;
 import com.subversions.process.Commit;
@@ -39,12 +39,16 @@ public class CollectorClient {
 	TerminalCommand terminalCommand= new TerminalCommand();
 
 	public static void main(String[] args) {
-		 new CollectorClient().startOnlineSearch();
+		
+		  new CollectorClient().startOnlineSearch();
+		 
 	}
 	
  
 	// Search online for library migration
 	void startOnlineSearch(){
+		
+		
 		//Created needed folder
 		terminalCommand.createFolder("Clone");
 		 
@@ -77,18 +81,11 @@ public class CollectorClient {
 			//if (gitHubOP.isPageExisit(appURL+"/blob/master/pom.xml")){
 				gitHubOP.cloneApp( );
 				
-				// find where pom file is living
-				ProjectFiles pomFilePath=	new ProjectFiles();
-				ArrayList<String> listOfPathsGeneral= pomFilePath.findPomFilePath(pathClone, appFolder);
-		    	if( listOfPathsGeneral.size()==0){
-		    		System.err.println("Cannot find pom file in this project");
-		    		gitHubOP.deleteFolder(appPath);
-		    		continue;
-		    	}
+			 
 		    	
 				gitHubOP.generateLogs(LOG_FILE_NAME);
 				// save commit info in database
-				ArrayList<Commit> commitList= gitHubOP.readLogFile(pathClone +"app_commits.txt","pom.xml");
+				ArrayList<Commit> commitList= gitHubOP.readLogFile(pathClone +"app_commits.txt",ProjectBuildFile.getType());
 			
 			    repositoriesDB.addNewProject(appURL,"Java", commitList);
 			 // save this link in clean repo links
@@ -221,20 +218,20 @@ public class CollectorClient {
 	//read Android app build.gradle file
 	public String listOfAndroidProjectLibrary(String projectVersionPath){
 		
-		String appProjectPath= projectVersionPath + "/app/build.gradle";
+		//String appProjectPath= projectVersionPath + "/app/build.gradle";
 		String versionLibraries="";
-		System.out.println("Search for  library at :" + appProjectPath);
+		System.out.println("Search for  library at :" + projectVersionPath);
 	    try{
 		    	//System.out.println("Path:"+ projectPath);
-		    BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(appProjectPath) ));         
+		    BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(projectVersionPath) ));         
 		    String line;
 		    while ((line = br.readLine()) != null) {
-		    	if(line.contains("compile ") &&
-		    			line.contains("com.android.support")==false &&
-		    			line.contains("com.google")==false){
+		    	if(line.trim().startsWith("compile ") || line.trim().startsWith("implementation ") 
+		    			 || line.trim().startsWith("testCompile ") ||  line.trim().startsWith("testImplementation ")
+		    			 ||  line.trim().startsWith("androidTestImplementation ") ){
 	            String[] libraryPackage =line.split("'");
 	            if(libraryPackage.length<2){ continue;}
-	            if(libraryPackage[1].trim().length()==0){ continue;}
+	            if(libraryPackage[1].trim().split(":").length!=3){ continue;} // Make sure we have library in format of GorpuId:LibraryName:Version
 		         if(versionLibraries.length()==0){
 		        	 versionLibraries=libraryPackage[1];
 		         }else{
@@ -249,18 +246,18 @@ public class CollectorClient {
 		}catch(IOException ex){
  
 		}
-	    // delete folder if isnot real app folder this missing gradle folder
-	    if(versionLibraries=="" && projectVersionPath.length()>0){
- 
-			try{
-				String cmdStr=" rm -rf "+ projectVersionPath;
-				Process p = Runtime.getRuntime().exec(new String[]{"bash","-c",cmdStr});
-				p.waitFor();
-				System.err.println("\n Clean and delete folder: "+projectVersionPath +", because isnot good App folder");
-			}catch (Exception e) {
-				// TODO: handle exception
-			}
-	    }
+//	    // delete folder if isnot real app folder this missing gradle folder
+//	    if(versionLibraries=="" && projectVersionPath.length()>0){
+// 
+//			try{
+//				String cmdStr=" rm -rf "+ projectVersionPath;
+//				Process p = Runtime.getRuntime().exec(new String[]{"bash","-c",cmdStr});
+//				p.waitFor();
+//				System.err.println("\n Clean and delete folder: "+projectVersionPath +", because isnot good App folder");
+//			}catch (Exception e) {
+//				// TODO: handle exception
+//			}
+//	    }
 	    
 	   System.out.println("Found libraries-> "+versionLibraries);
 	   return versionLibraries;
