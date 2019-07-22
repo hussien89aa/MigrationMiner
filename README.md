@@ -50,11 +50,11 @@ Open a terminal and run the following commands
 After running the commands, the database should be created with all tables and views.
 
 * Open eclipse IDE then go to File-> import-> Maven-> existing Maven Projects-> Select MigrationMiner directory.
-* Set your local MYSQL username and password in this file "DatabaseLogin.java", which lives under MigrationMiner/src/main/java/com/project/settings/DatabaseLogin.java.
+* Set your local MYSQL username and password in this file [DatabaseLogin.java](https://github.com/hussien89aa/MigrationMiner/blob/master/MigrationMiner/src/main/java/com/project/settings/DatabaseLogin.java).
 * Update MigrationMiner/data/gitRepositories.csv with the list of git repositories that you want to use as input (they will be searched for potential library migrations).
-* Go to your github account under Settings > Developer Settings > Personal Access Tokens, add new token. Use token to set your GitHub token in this file "GithubLogin.java", which lives under MigrationMiner/src/main/java/com/project/settings/GithubLogin.java. Your token will be used so that Migration Miner can search a large number of GitHub projects without authentication issues.
+* Go to your github account under Settings > Developer Settings > Personal Access Tokens, add new token. Use token to set your GitHub token in this file [GithubLogin.java](https://github.com/hussien89aa/MigrationMiner/blob/master/MigrationMiner/src/main/java/com/project/settings/GithubLogin.java). Your token will be used so that Migration Miner can search a large number of GitHub projects without authentication issues.
 * (Optional) We print alot of logs, to avoid console buffer overflow. In eclipse IDE go to   preferences-> console-> limit console buffer size to small number such as 10000.
-* Run the Main.java file that lives under MigrationMiner/src/main/java/com/main/parse/Main.java.
+* Run the [Main.java](https://github.com/hussien89aa/MigrationMiner/blob/master/MigrationMiner/src/main/java/com/main/parse/Main.java).
 
 
 ## Tool output
