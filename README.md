@@ -144,7 +144,6 @@ void printMethodWithDocs(String libraryName,ArrayList<String> listOfMethods ) {
 * Alrubaye, Hussein, Mohamed Wiem Mkaouer, Igor Khokhlov, Leon Reznik, Ali Ouni, and Jason Mcgoff. [Learning to Recommend Third-Party Library Migration Opportunities at the API Level](https://people.rit.edu/hat6622/papers/1906.02882.pdf). arXiv preprint arXiv:1906.02882 (2019).
 * Aljohani, A. (2019).[ An empirical study on discovering a new self-admitted technical debt type-API-debt](https://scholarworks.rit.edu/theses/10065/). Thesis. Rochester Institute of Technology. 
 * Alrubaye, H., Mkaouer, & M. W., Ali, O (2019). [MigrationMiner: An Automated Detection Tool of Third-Party Java Library Migration at the Method Level](https://arxiv.org/pdf/1907.02997.pdf). 2019 IEEE International Conference on Software Maintenance and Evolution (ICSME).
-* Alrubaye, Hussein, Deema AlShoaibi, Mohamed Wiem Mkaouer, Ali Ouni, . [How Does API Migration Impact Software Quality and Comprehension? An Empirical Study](https://people.rit.edu/hat6622/papers/API_Migration_Empirical.pdf). arXiv preprint arXiv:1906.02882 (2019). 
  
 ## License
 
