@@ -6,24 +6,26 @@ import java.util.HashMap;
 public class MethodDoc {
 	public String fillName;
 	public String description;
-	public HashMap<String,String> parameters= new HashMap<String,String>();
-	public MethodDoc(String fillName,String description) {
-		this.fillName=fillName;
-		this.description=description;
+	public HashMap<String, String> parameters = new HashMap<String, String>();
+
+	public MethodDoc(String fillName, String description) {
+		this.fillName = fillName;
+		this.description = description;
 	}
-	public void setDescription(String description){
-		this.description=description;
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
-	
-	public void addParameters(String paramName,String paramDescription){
+
+	public void addParameters(String paramName, String paramDescription) {
 		parameters.put(paramName, paramDescription);
 	}
 
-	public void print( ){
-		System.out.println("fillName:"+ fillName);
-		System.out.println("description:"+ description);
+	public void print() {
+		System.out.println("fillName:" + fillName);
+		System.out.println("description:" + description);
 		for (String key : parameters.keySet()) {
-			System.out.println(key +":"+ parameters.get(key));
+			System.out.println(key + ":" + parameters.get(key));
 		}
 		System.out.println("-----------------------");
 	}
