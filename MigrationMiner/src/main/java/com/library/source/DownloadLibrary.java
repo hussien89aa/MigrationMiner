@@ -102,7 +102,10 @@ public class DownloadLibrary {
 					+ ".txt";
 			System.out.println("\nStart generate Function Signature " + cmdStr + " library......");
 			Process p = Runtime.getRuntime().exec(new String[] { "bash", "-c", cmdStr });
-			p.waitFor();
+			if(!p.waitFor(5, TimeUnit.MINUTES)) {
+			    //timeout - kill the process. 
+			    p.destroy(); 
+			}
 			System.out.println("<== Process completed: ");
 			// TODO: remove jar library and tfs files
 		} catch (Exception e) {
@@ -138,7 +141,10 @@ public class DownloadLibrary {
 		try {
 			System.out.println("==> Start Download " + DartifactId + " library......");
 			Process p = Runtime.getRuntime().exec(new String[] { "bash", "-c", cmdStr });
-			p.waitFor();
+			if(!p.waitFor(5, TimeUnit.MINUTES)) {
+			    //timeout - kill the process. 
+			    p.destroy(); 
+			}
 			System.out.println("<== Download completed: ");
 			// buildTFfiles(LibraryInfo,pathToSaveLibrary);
 		} catch (Exception e) {
@@ -161,7 +167,10 @@ public class DownloadLibrary {
 			String cmdStr = "jar -tf " + pathlib + "/" + libraryName + ">>" + pathlib + "/tfs/" + libraryName + ".txt";
 			System.out.println("==> generate tfs....");
 			Process p = Runtime.getRuntime().exec(new String[] { "bash", "-c", cmdStr });
-			p.waitFor();
+			if(!p.waitFor(5, TimeUnit.MINUTES)) {
+			    //timeout - kill the process. 
+			    p.destroy(); 
+			}
 			System.out.println("<== Process completed: ");
 			isValidLibraryToGenerateSigantures(libraryName);
 		} catch (Exception e) {

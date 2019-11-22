@@ -148,7 +148,10 @@ public class DocManagerClient {
 					+ " && rm -rf " + jarDocNameZip;
 			System.out.println(cmdStr);
 			Process p = Runtime.getRuntime().exec(new String[] { "bash", "-c", cmdStr });
-			p.waitFor();
+			if(!p.waitFor(5, TimeUnit.MINUTES)) {
+			    //timeout - kill the process. 
+			    p.destroy(); 
+			}
 			System.out.println("<== Complete Generate");
 
 		} catch (Exception e) {
