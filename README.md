@@ -7,10 +7,11 @@
 ### When you use this tool, please cite this paper.
 
 <pre>
-@inproceedings{alrbaye2019MigrationMiner,
+@inproceedings{alrubaye2019migrationminer,
   title={MigrationMiner: An Automated Detection Tool of Third-Party Java Library Migration at the Method Level},
-  author={Hussein Alrubaye, Mohamed Wiem Mkaouer, Ali Ouni},
+  author={Alrubaye, Hussein and Mkaouer, Mohamed Wiem and Ouni, Ali},
   booktitle={2019 IEEE International Conference on Software Maintenance and Evolution (ICSME)},
+  pages={414--417},
   year={2019},
   organization={IEEE}
 }
