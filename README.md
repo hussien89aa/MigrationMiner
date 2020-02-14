@@ -138,11 +138,11 @@ void printMethodWithDocs(String libraryName,ArrayList<String> listOfMethods ) {
 ```
  
 ## MigrationMiner has been used so far in the following papers:
+* Alrubaye, Hussein, Mohamed Wiem Mkaouer, Igor Khokhlov, Leon Reznik, Ali Ouni, and Jason Mcgoff. [Learning to Recommend Third-Party Library Migration Opportunities at the API Level](https://people.rit.edu/hat6622/papers/1906.02882.pdf).Journal of Applied Soft Computing (2020).
 
 * Alrubaye, H., & Mkaouer, M. W. (2018, October). [Automating the detection of third-party Java library migration at the function level](https://dl.acm.org/citation.cfm?id=3291299). In Proceedings of the 28th Annual International Conference on Computer Science and Software Engineering (pp. 60-71). IBM Corp.
 * Alrubaye, H., Mkaouer, & M. W., Ali, O (2019).[ On the Use of Information Retrieval to Automate the Detection of Third-Party Java Library Migration At The Function Level](https://dl.acm.org/citation.cfm?id=3339129), 27th IEEE/ACM International Conference on Program Comprehension 2019.
 * Alrubaye, H., & Wiem, M. (2019).[ Variability in Library Evolution](https://books.google.de/books?hl=en&lr=&id=uPSDDwAAQBAJ&oi=fnd&pg=PA295&dq=Variability+in+Library+Evolution+hussein&ots=zX79FyHrY8&sig=1-SwLFJLHP44UISBx2iQQpZZSLE#v=onepage&q=Variability%20in%20Library%20Evolution%20hussein&f=false). Software Engineering for Variability Intensive Systems: Foundations and Applications, 295.
-* Alrubaye, Hussein, Mohamed Wiem Mkaouer, Igor Khokhlov, Leon Reznik, Ali Ouni, and Jason Mcgoff. [Learning to Recommend Third-Party Library Migration Opportunities at the API Level](https://people.rit.edu/hat6622/papers/1906.02882.pdf). arXiv preprint arXiv:1906.02882 (2019).
 * Aljohani, A. (2019).[ An empirical study on discovering a new self-admitted technical debt type-API-debt](https://scholarworks.rit.edu/theses/10065/). Thesis. Rochester Institute of Technology. 
 * Alrubaye, H., Mkaouer, & M. W., Ali, O (2019). [MigrationMiner: An Automated Detection Tool of Third-Party Java Library Migration at the Method Level](https://arxiv.org/pdf/1907.02997.pdf). 2019 IEEE International Conference on Software Maintenance and Evolution (ICSME).
  
