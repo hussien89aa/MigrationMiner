@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import com.database.mysql.LibraryDocumentationDB;
 import com.database.mysql.MigrationRule;
