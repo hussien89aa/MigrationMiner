@@ -130,7 +130,7 @@ public class DownloadLibrary {
 		String DartifactId = LibraryInfos[1];
 		String Dversion = LibraryInfos[2];
 
-		String cmdStr="cd "+pathlib+ pathToSaveLibrary + " && curl -L -O http://search.maven.org/remotecontent?filepath="+DgroupId.replace(".", "/") +"/"+DartifactId +"/"+ Dversion+ "/"+ DartifactId+"-"+ Dversion+(isDocs?"-javadoc":"")+".jar";
+		String cmdStr="cd "+pathlib+" && curl -L -O http://search.maven.org/remotecontent?filepath="+DgroupId.replace(".", "/") +"/"+DartifactId +"/"+ Dversion+ "/"+ DartifactId+"-"+ Dversion+(isDocs?"-javadoc":"")+".jar";
 		//This Maven  repo depreacted
 		//String cmdStr = "cd " + pathlib + " &&  curl -L -O http://central.maven.org/maven2/" + DgroupId.replace(".", "/") + "/" + DartifactId + "/" + Dversion + "/" + DartifactId + "-" + Dversion + (isDocs ? "-javadoc" : "") + ".jar";
 		
