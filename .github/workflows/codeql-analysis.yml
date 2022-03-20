@@ -17,8 +17,6 @@ on:
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ master ]
-  schedule:
-    - cron: '40 21 * * 3'
 
 jobs:
   analyze:
@@ -62,9 +60,11 @@ jobs:
     #    and modify them (or add more) to build your code if your project
     #    uses a compiled language
 
-    #- run: |
+    - run: |
     #    make bootstrap
      #   make release
+         cd MigrationMiner
+         mvn clean install
     
 
     - name: Perform CodeQL Analysis
